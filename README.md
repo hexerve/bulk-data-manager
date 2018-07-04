@@ -1,14 +1,18 @@
-# App name
+# Data Management
 
-[brief description of the app]
+This App is used for Bulk Data Management of zendesk support.
 
-### The following information is displayed:
+### About:
 
-* info1
-* info2
-* info3
+### Stack:
 
-Please submit bug reports to [Insert Link](). Pull requests are welcome.
+* ZAF (Zendesk App Framwork)
+* JavaScript / JQuery
+* CSS
+* HTML
 
-### Screenshot(s):
-[put your screenshots down here.]
+### Core Contributors:
+
+* [Jagdish Singh](https://github.com/JDchauhan)
+
+Please submit bug reports to [https://github.com/hexerve/data-management](https://github.com/hexerve/data-management). Pull requests are welcome.
