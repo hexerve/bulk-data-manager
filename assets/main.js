@@ -18,6 +18,7 @@ $(function() {
         function(response) {
             for(let i = 0; i < response.count; i++){
                 var table = '<tr id="' + i + '">';
+                table += '<td class="ticket_id" id="id_' + i + '"></td>';
                 table += '<td class="name"><input id="name_' + i + '"></input></td>';
                 table += '<td class="phone" id="phone_' + i + '"></td>';
                 table += '<td class="email" id="email_' + i + '"></td>';
@@ -49,7 +50,8 @@ $(function() {
                 for(var tag in ticket.tags){
                     tags += tag + " ";
                 }
-                
+
+                $("#id_" + i).text(ticket.id);
                 $("#subject_" + ticket.id).val(ticket.subject);
                 $("#status_" + ticket.id).val(ticket.status);
                 $("#type_" + ticket.id).val(ticket.type);

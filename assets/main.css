@@ -33,8 +33,12 @@ input:focus {
     border-bottom: 2px solid #30AABC;
 }
 
+.id {
+    width: 5%;
+}
+
 .name {
-    width: 12%;
+    width: 10%;
 }
 
 .phone {
@@ -58,7 +62,7 @@ input:focus {
 }
 
 .description {
-    width: 28%;
+    width: 25%;
 }
 
 .tags {
