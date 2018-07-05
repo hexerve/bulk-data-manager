@@ -1,0 +1,98 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+body {
+    width: 2000px;
+}
+
+table {
+
+}
+
+tr {
+    border-bottom: 1px solid #d1d1d1;
+}
+
+th {
+    font-weight: bolder;
+}
+
+td {
+
+}
+
+input {
+    width: 100%;
+}
+
+input:focus {
+    outline: none;
+    border-bottom: 2px solid #30AABC;
+}
+
+.name {
+    width: 12%;
+}
+
+.phone {
+    width: 8%;
+}
+
+.email {
+    width: 14%;
+}
+
+.subject {
+    width: 20%;
+}
+
+.status {
+    width: 3%;
+}
+
+.type {
+    width: 5%;
+}
+
+.description {
+    width: 28%;
+}
+
+.tags {
+    width: 10%;
+}
+
+#tickets_data {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#tickets_data td, #tickets_data th {
+    border: 1px solid #ddd;
+}
+
+#tickets_data tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+#tickets_data tr:nth-child(even) input {
+    background-color: #f2f2f2;
+}
+
+#tickets_data tr:hover {
+    background-color: #ddd;
+}
+
+#tickets_data tr:hover input {
+    background-color: #ddd;
+}
+
+#tickets_data th {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background-color: #4CAF50;
+    color: white;
+}

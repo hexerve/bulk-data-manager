@@ -7,6 +7,8 @@ This App is used for Bulk Data Management of zendesk support.
 ### Stack:
 
 * ZAF (Zendesk App Framwork)
+* Zendesk core API
+* AJAX
 * JavaScript / JQuery
 * CSS
 * HTML
