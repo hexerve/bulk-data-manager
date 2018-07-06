@@ -17,14 +17,13 @@ $(function() {
     client.request(options).then(
         function(response) {
             j = 0;
-            for(let i = 1; i <= response.count; i++){
+            var k = response.count;
+            for(let i = 1; i <= k; i++){
                 while(response.tickets[j].id != i){
                     i++;
-                    console.log("hi");
+                    k++;
                 }
                 j++;
-                //console.log(response.tickets[i - 1].id)
-                console.log(i);
                 var table = '<tr id="' + i + '">';
                 table += '<td class="ticket_id"> <a id="id_' + i + '" target="_blank"></a></td>';
                 table += '<td class="name"> <a id="name_' + i + '" target="_blank"></a></td>';
@@ -53,14 +52,13 @@ $(function() {
             }
 
             var j = 0;
-            for(let i = 0; i < response.count; i++){
-                while(response.tickets[j].id != i + 1){
+            console.log(k);
+            for(let i = 1; i <= k; i++){
+                while(response.tickets[j].id != i){
                     i++;
-                    console.log("hi");
                 }
-                j++;
                 var ticket = response.tickets[j];
-                console.log(ticket);
+                j++;
                 var options = {
                     url: base_url + "/api/v2/users/" + ticket.requester_id + ".json",
                     type: 'GET',
@@ -70,25 +68,24 @@ $(function() {
                 client.request(options).then(
                     function(requester) {
                         requester = requester.user;
-                        
-                        $("#name_" + (i+1)).attr("href", base_url + "/agent/tickets/" + (i + 1) +
-                            "/requester/assigned_tickets").text(requester.name);
-                        //$("#name_" + (i+1)).attr("name", requester.id);
 
-                        $("#phone_" + (i+1)).text(requester.phone);
-                        $("#email_" + (i+1)).text(requester.email);
+                        $("#name_" + i).attr("href", base_url + "/agent/tickets/" + i +
+                            "/requester/assigned_tickets").text(requester.name);
+                        //$("#name_" + i).attr("name", requester.id);
+
+                        $("#phone_" + i).text(requester.phone);
+                        $("#email_" + i).text(requester.email);
                 });
                 var tags = "";
                 for(var tag in ticket.tags){
                     tags += tag + " ";
                 }
-
-                $("#id_" + (ticket.id)).attr("href", base_url + "/agent/tickets/" + ticket.id).text(ticket.id);
-                $("#subject_" + ticket.id).val(ticket.subject);
-                $("#status_" + ticket.id + " option[value='" + ticket.status + "']").attr("selected","selected");
-                $("#type_" + ticket.id + " option[value='" + ticket.type + "']").attr("selected","selected");
-                $("#description_" + ticket.id).val(ticket.description);
-                $("#tags_" + ticket.id).val(ticket.tags);
+                $("#id_" + i).attr("href", base_url + "/agent/tickets/" + i).text(i);
+                $("#subject_" + i).val(ticket.subject);
+                $("#status_" + i + " option[value='" + ticket.status + "']").attr("selected","selected");
+                $("#type_" + i + " option[value='" + ticket.type + "']").attr("selected","selected");
+                $("#description_" + i).val(ticket.description);
+                $("#tags_" + i).val(ticket.tags);
                 
             } 
     });
