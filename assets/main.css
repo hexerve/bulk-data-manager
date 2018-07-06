@@ -26,9 +26,21 @@ td {
 
 input {
     width: 100%;
+    height: 100%;
 }
 
-input:focus {
+textarea {
+    overflow-y: scroll;
+    width: 100%;
+    resize: vertical;
+}
+
+select {
+    height: 100%;
+    width: 100%;
+}
+
+input:focus, select:focus {
     outline: none;
     border-bottom: 2px solid #30AABC;
 }
@@ -82,15 +94,19 @@ input:focus {
     background-color: #f2f2f2;
 }
 
-#tickets_data tr:nth-child(even) input {
+#tickets_data tr:nth-child(even) input, #tickets_data tr:nth-child(even) select,#tickets_data tr:nth-child(even) textarea {
     background-color: #f2f2f2;
+}
+
+#tickets_data tr:nth-child(odd) textarea {
+    background-color: #fff;
 }
 
 #tickets_data tr:hover {
     background-color: #ddd;
 }
 
-#tickets_data tr:hover input {
+#tickets_data tr:hover input, #tickets_data tr:hover select,#tickets_data tr:hover textarea {
     background-color: #ddd;
 }
 
