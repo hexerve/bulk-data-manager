@@ -1,47 +1,85 @@
 <html>
+
 <head>
   <meta charset="utf-8">
   <!-- http://garden.zendesk.com -->
   <link rel="stylesheet" href="https://assets.zendesk.com/apps/sdk-assets/css/2/zendesk_garden.css" type="text/css">
   <link rel="stylesheet" href="./main.css" type="text/css">
 </head>
-<body>
 
-<table id="tickets_data">
-  <tr id="heading">
-    <th class="id">
-      Ticket ID*
-    </th>
-    <th class="name">
-      Name*
-    </th>
-    <th class="phone">
-      Phone*
-    </th>
-    <th class="email">
-      Email*
-    </th>
-    <th class="subject">
-      Subject
-    </th>
-    <th class="status">
-      Status
-    </th>
-    <th class="type">
-      Type
-    </th>
-    <th class="description">
-      Description*
-    </th>
-    <th class="tags">
-      Tags
-    </th>
-  </tr>
-</table>
+<body>
+  <table id="tickets_data">
+    <tr id="heading">
+      <th class="id" id="id">
+        <button class="shift_button lefter" id="button1">&laquo;</button>
+        <button class="shift_button left" id="id_left">&lt;</button>
+        <span class="heading_text">Ticket ID*</span>
+        <button class="shift_button righter" id="sort_id">&#8693;</button>
+        <button class="shift_button right" id="id_right">&gt;</button>
+      </th>
+      <th class="name" id="name">
+        <button class="shift_button lefter" id="button2">&laquo;</button>
+        <button class="shift_button left" id="name_left">&lt;</button>
+        <span class="heading_text">Name*</span>
+        <button class="shift_button righter" id="sort_name">&#8693;</button>
+        <button class="shift_button right" id="name_right">&gt;</button>
+      </th>
+      <th class="phone" id="phone">
+        <button class="shift_button lefter" id="button3">&laquo;</button>
+        <button class="shift_button left" id="phone_left">&lt;</button>
+        <span class="heading_text">Phone*</span>
+        <button class="shift_button righter" id="sort_phone">&#8693;</button>
+        <button class="shift_button right" id="phone_right">&gt;</button>
+      </th>
+      <th class="email" id="email">
+        <button class="shift_button lefter" id="button4">&laquo;</button>
+        <button class="shift_button left" id="email_left">&lt;</button>
+        <span class="heading_text">Email*</span>
+        <button class="shift_button righter" id="sort_email">&#8693;</button>
+        <button class="shift_button right" id="email_right">&gt;</button>
+      </th>
+      <th class="subject" id="subject">
+        <button class="shift_button lefter" id="button5">&laquo;</button>
+        <button class="shift_button left" id="subject_left">&lt;</button>
+        <span class="heading_text">Subject</span>
+        <button class="shift_button righter" id="sort_subject">&#8693;</button>
+        <button class="shift_button right" id="subject_right">&gt;</button>
+      </th>
+      <th class="status" id="status">
+        <button class="shift_button lefter" id="button6">&laquo;</button>
+        <button class="shift_button left" id="status_left">&lt;</button>
+        <span class="heading_text">Status</span>
+        <button class="shift_button righter" id="sort_status">&#8693;</button>
+        <button class="shift_button right" id="status_right">&gt;</button>
+      </th>
+      <th class="type" id="type">
+        <button class="shift_button lefter" id="button7">&laquo;</button>
+        <button class="shift_button left" id="type_left">&lt;</button>
+        <span class="heading_text">Type</span>
+        <button class="shift_button righter" id="sort_type">&#8693;</button>
+        <button class="shift_button right" id="type_right">&gt;</button>
+      </th>
+      <th class="description" id="description">
+        <button class="shift_button lefter" id="button8">&laquo;</button>
+        <button class="shift_button left" id="description_left">&lt;</button>
+        <span class="heading_text">Description*</span>
+        <button class="shift_button righter" id="sort_desc">&#8693;</button>
+        <button class="shift_button right" id="description_right">&gt;</button>
+      </th>
+      <th class="tags" id="tags">
+        <button class="shift_button lefter" id="button9">&laquo;</button>
+        <button class="shift_button left" id="tags_left">&lt;</button>
+        <span class="heading_text">Tags</span>
+        <button class="shift_button righter" id="sort_tags">&#8693;</button>
+        <button class="shift_button right" id="tags_right">&gt;</button>
+      </th>
+    </tr>
+  </table>
 
   <!-- https://github.com/zendesk/zendesk_app_framework_sdk -->
   <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="./main.js"></script>
 </body>
+
 </html>
