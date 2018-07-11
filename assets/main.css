@@ -45,6 +45,34 @@ input:focus, select:focus {
     border-bottom: 2px solid #30AABC;
 }
 
+.selection {
+    width: 1%;
+    margin-right: 10px;
+}
+
+th.selection {
+    padding-top: 0px !important; 
+}
+
+td.selection {
+    padding-left: 0px;
+}
+
+th.selection:hover {
+    background: #ff0000 !important;
+    cursor: pointer;
+}
+
+input.selection {
+    width: 12px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+textarea:disabled {
+    color: #909090
+}
+
 .id {
     width: 8%;
 }
@@ -64,7 +92,7 @@ input:focus, select:focus {
 }
 
 .subject {
-    width: 16%;
+    width: 15%;
 }
 
 .status {

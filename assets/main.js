@@ -26,11 +26,14 @@ $(function () {
                 }
                 j++;
                 var table = '<tr id="' + i + '">';
-                table += '<td class="ticket_id id_' + i + '""> <a id="id_' + i + '" target="_blank"></a></td>';
-                table += '<td class="name name_' + i + '""> <a id="name_' + i + '" target="_blank"></a></td>';
+                table += '<td class="selection selection_' + i + '"><input type="checkbox" class="selection" id="selection_' + i + '"></input></td>';
+                table += '<td class="ticket_id id_' + i + '"> <a id="id_' + i + '" target="_blank"></a></td>';
+                table += '<td class="name name_' + i + '"> <a id="name_' + i + '" target="_blank"></a></td>';
                 table += '<td class="phone phone_' + i + '"" id="phone_' + i + '"></td>';
                 table += '<td class="email email_' + i + '" id="email_' + i + '"></td>';
                 table += '<td class="subject subject_' + i + '"><input id="subject_' + i + '"></input></td>';
+
+                table += '<td class="asignee asignee_' + i + '"><input id="asignee_' + i + '"></input></td>';
 
                 table += '<td class="status status_' + i + '"><select id="status_' + i + '">';
                 table += '<option value="open">open</option>';
@@ -136,7 +139,6 @@ $(function () {
         var ticket_id = id[1];
         var value = $(this).val();
         var ticket;
-
         switch (field_name) {
             case "subject":
                 ticket = {
@@ -173,10 +175,12 @@ $(function () {
 
     $(document).on('click', '#button1', function () {
         shiftColumnToBegining("id");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#id_left', function () {
         shiftLeftColumn("id");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#id_right', function () {
@@ -186,10 +190,12 @@ $(function () {
 
     $(document).on('click', '#button2', function () {
         shiftColumnToBegining("name");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#name_left', function () {
         shiftLeftColumn("name");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#name_right', function () {
@@ -199,10 +205,12 @@ $(function () {
 
     $(document).on('click', '#button3', function () {
         shiftColumnToBegining("phone");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#phone_left', function () {
         shiftLeftColumn("phone");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#phone_right', function () {
@@ -212,10 +220,12 @@ $(function () {
 
     $(document).on('click', '#button4', function () {
         shiftColumnToBegining("email");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#email_left', function () {
         shiftLeftColumn("email");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#email_right', function () {
@@ -225,10 +235,12 @@ $(function () {
 
     $(document).on('click', '#button5', function () {
         shiftColumnToBegining("subject");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#subject_left', function () {
         shiftLeftColumn("subject");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#subject_right', function () {
@@ -242,6 +254,7 @@ $(function () {
 
     $(document).on('click', '#status_left', function () {
         shiftLeftColumn("status");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#status_right', function () {
@@ -255,6 +268,7 @@ $(function () {
 
     $(document).on('click', '#type_left', function () {
         shiftLeftColumn("type");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#type_right', function () {
@@ -264,10 +278,12 @@ $(function () {
 
     $(document).on('click', '#button8', function () {
         shiftColumnToBegining("description");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#description_left', function () {
         shiftLeftColumn("description");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#description_right', function () {
@@ -277,10 +293,12 @@ $(function () {
 
     $(document).on('click', '#button9', function () {
         shiftColumnToBegining("tags");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#tags_left', function () {
         shiftLeftColumn("tags");
+        shiftColumnToBegining("selection");
     });
 
     $(document).on('click', '#tags_right', function () {
@@ -321,6 +339,10 @@ $(function () {
 
     $(document).on('click', '#sort_tags', function () {
         sortTable("tags");
+    });
+
+    $(document).on('click', '#selection', function () {
+        deleteSelectedTickets();
     });
 
     function shiftRightColumn(field) {
@@ -386,27 +408,27 @@ $(function () {
                 shouldSwitch = false;
                 /*Get the two elements you want to compare,
                 one from current row and one from the next:*/
-                if(column == "id" || column == "name" || column == "phone" || column == "email"){
+                if (column == "id" || column == "name" || column == "phone" || column == "email") {
                     x = $("#" + column + "_" + $(rows[i]).attr("id")).text();
                     y = $("#" + column + "_" + $(rows[i + 1]).attr("id")).text();
-                }else{
+                } else {
                     x = $("#" + column + "_" + $(rows[i]).attr("id")).val();
                     y = $("#" + column + "_" + $(rows[i + 1]).attr("id")).val();
                 }
-                if(column == "id"){
+                if (column == "id") {
                     //check if the two rows should switch place:
                     if (parseInt(x) < parseInt(y)) {
                         //if so, mark as a switch and break the loop:
                         shouldSwitch = true;
                         break;
                     }
-                }else {
+                } else {
                     //check if the two rows should switch place:
-                    if(column == "type"){
-                        if(x == null){
+                    if (column == "type") {
+                        if (x == null) {
                             x = "a";
                         }
-                        if(y == null){
+                        if (y == null) {
                             y = "a";
                         }
                     }
@@ -423,6 +445,33 @@ $(function () {
                 rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                 switching = true;
             }
+        }
+    }
+
+    function deleteSelectedTickets() {
+        var ids = "";
+        rows = $("#tickets_data TR");
+        for (i = parseInt($(rows[1]).attr("id")) - 1; i < rows.length; i++) {
+            if ($("#selection_" + i).is(":checked")) {
+                ids += i;
+                ids += ",";
+            }
+        }
+        ids = ids.slice(0, ids.length - 1);
+
+        if (ids != "") {
+            var options = {
+                url: base_url + "/api/v2/tickets/destroy_many.json?ids=" + ids,
+                type: 'DELETE',
+                contentType: "application/json",
+                cors: true
+            };
+            client.request(options).then(
+                function (response) {
+                    console.log(response);
+                });
+            location.reload(true);
+
         }
     }
 
