@@ -137,6 +137,11 @@ $(function () {
         var id = $(this).attr('id').split("_");
         var field_name = id[0];
         var ticket_id = id[1];
+
+        if (isNaN(ticket_id)) {
+            return;
+        }
+
         var value = $(this).val();
         var ticket;
         switch (field_name) {
@@ -171,6 +176,14 @@ $(function () {
 
         client.request(options).then(
             function (ticket) { });
+    });
+
+    $(document).on('change', '#fix_pos', function () {
+        if ($("#fix_pos").is(":checked")) {
+            $(".phone").addClass("fix");
+        } else {
+            $(".phone").removeClass("fix");
+        }
     });
 
     $(document).on('click', '#button1', function () {
