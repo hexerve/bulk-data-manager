@@ -1,12 +1,12 @@
 {
   "name": "Bulk Data Manager",
   "author": {
-    "name": "Jagdish Singh",
-    "email": "Jagdish.chauhan01@gmail.com",
-    "url": "https://JDchauhan.github.io"
+    "name": "Hexerve Solutions",
+    "email": "hexerve@gmail.com",
+    "url": "http://www.hexerve.com"
   },
   "defaultLocale": "en",
-  "private": true,
+  "private": false,
   "location": {
     "support": {
       "nav_bar": "assets/iframe.html"
