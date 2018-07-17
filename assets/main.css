@@ -191,15 +191,3 @@ textarea:disabled {
     background-color: #30AABC;
     color: white;
 }
-
-#fix_pos {
-    height: 16px;
-    width: 16px;
-}
-
-.fix {
-    position: fixed;
-    width: 18.7%;
-    height: 44px;
-    background: #E0FFFF;
-}
