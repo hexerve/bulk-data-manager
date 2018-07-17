@@ -32,9 +32,7 @@ $(function () {
                 table += '<td class="phone phone_' + i + '"" id="phone_' + i + '"></td>';
                 table += '<td class="email email_' + i + '" id="email_' + i + '"></td>';
                 table += '<td class="subject subject_' + i + '"><input id="subject_' + i + '"></input></td>';
-
-                table += '<td class="asignee asignee_' + i + '"><input id="asignee_' + i + '"></input></td>';
-
+                
                 table += '<td class="status status_' + i + '"><select id="status_' + i + '">';
                 table += '<option value="open">open</option>';
                 table += '<option value="pending">pending</option>';
