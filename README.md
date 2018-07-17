@@ -8,9 +8,7 @@ When we import data in bulk or manage bulk data, it is always a tedious work as 
 
 Hence we made a Zendesk app which will work similar to the above-mentioned software. Simply find "Bulk Data Manager" in Zendesk marketplace and install it. Initially, it will come for 7 days of trial. Once the trial period is over, you need to buy the subscription and it will work as it should.
 
-When you install the application, you will see an icon to the extreme left side of Zendesk window and when we click on this, it loads a big window by hiding most of the parts of Zendesk portal and loads a window like a spreadsheet with all the information with heading on top. If you want to reposition any column, you can use the arrow keys mentioned on the app area itself.
-
-when you make any changes to any cell, it will be saved then and there. One of the best features of this app is to "freeze the column" which will be used as a reference column when you reach out to your customers. Normally it is given in "Phone Numbers" or "Contact Number" field so that you can scroll the entire data horizontally like we do this in Microsoft Excel.
+When you install the application, you will see an icon to the extreme left side of Zendesk window and when we click on this, it loads a big window by hiding most of the parts of Zendesk portal and loads a window like a spreadsheet with all the information with heading on top. If you want to reposition any column, you can use the arrow keys mentioned on the app area itself. When you make any changes to any cell, it will be saved then and there.
 
 This way we can reach out to our customers easily in bulk when we do a Tele calling. In case if you are using any calling app, you can use that as well. This application will work fine with "Zendesk talk" app which will be helpful for "Tele calling" in bulk.
 

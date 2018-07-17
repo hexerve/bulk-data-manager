@@ -178,14 +178,6 @@ $(function () {
             function (ticket) { });
     });
 
-    $(document).on('change', '#fix_pos', function () {
-        if ($("#fix_pos").is(":checked")) {
-            $(".phone").addClass("fix");
-        } else {
-            $(".phone").removeClass("fix");
-        }
-    });
-
     $(document).on('click', '#button1', function () {
         shiftColumnToBegining("id");
         shiftColumnToBegining("selection");
