@@ -17,4 +17,4 @@ This App is used for Bulk Data Management of zendesk support.
 
 * [Jagdish Singh](https://github.com/JDchauhan)
 
-Please submit bug reports to [https://github.com/hexerve/data-management](https://github.com/hexerve/data-management). Pull requests are welcome.
+Please submit bug reports to [https://github.com/hexerve/bulk-data-manager](https://github.com/hexerve/bulk-data-manager). Pull requests are welcome.
