@@ -1,6 +1,5 @@
 $(function () {
-    var k, pageNo = 0, response;
-    var isNextPage = true;
+    var k;
     // Initialise the Zendesk JavaScript API client
     // https://developer.zendesk.com/apps/docs/apps-v2
     var client = ZAFClient.init();
@@ -10,102 +9,90 @@ $(function () {
     url = url[1].split('&');
     var base_url = decodeURIComponent(url[0]);
 
-    function incrementPage() {
-        pageNo++;
-        var base = (pageNo - 1) * 100;
-        var options = {
-            url: base_url + "/api/v2/tickets.json?page=" + pageNo,
-            type: 'GET',
-            contentType: "application/json",
-            cors: true
-        };
-        client.request(options).then(
-            function (response) {
+    var options = {
+        url: base_url + "/api/v2/ticket_audits.json?include=users&comments",
+        type: 'GET',
+        contentType: "application/json",
+        cors: true
+    };
+    client.request(options).then(
+        function (response) {
 
-                if (!response.next_page)
-                    isNextPage = false;
+            let test = [];
 
-                j = 0;
-                k = response.tickets.length;
-                for (let i = 1; i <= k; i++) {
-                    while (response.tickets[j].id != i) {
-                        i++;
-                        k++;
+            function ifExist(id) {
+                for (j = 0; j < test.length; j++) {
+                    if (id == test[j]) {
+                        return true;
                     }
-                    j++;
-                    var table = '<tr id="' + i + '">';
-                    table += '<td class="selection selection_' + i + '"><input type="checkbox" class="selection" id="selection_' + i + '"></input></td>';
-                    table += '<td class="ticket_id id_' + i + '"> <a id="id_' + i + '" target="_blank"></a></td>';
-                    table += '<td class="name name_' + i + '"> <a id="name_' + i + '" target="_blank"></a></td>';
-                    table += '<td class="phone phone_' + i + '"" id="phone_' + i + '"></td>';
-                    table += '<td class="email email_' + i + '" id="email_' + i + '"></td>';
-                    table += '<td class="subject subject_' + i + '"><input id="subject_' + i + '"></input></td>';
+                }
+                return false;
+            }
 
-                    table += '<td class="status status_' + i + '"><select id="status_' + i + '">';
-                    table += '<option value="open">open</option>';
-                    table += '<option value="pending">pending</option>';
-                    table += '<option value="solved">solved</option>';
-                    table += '</select></td>';
+            k = response.audits.length;
 
-                    table += '<td class="type type_' + i + '"><select id="type_' + i + '">';
-                    table += '<option value="" selected disabled>-</option>';
-                    table += '<option value="question">question</option>';
-                    table += '<option value="incident">incident</option>';
-                    table += '<option value="problem">problem</option>';
-                    table += '<option value="task">task</option>';
-                    table += '</select></td>';
+            for (i = 0; i < k; i++) {
+                if (!ifExist(response.audits[i].ticket_id)) {
+                    test.push(response.audits[i].ticket_id);
+                }
+            }
 
-                    table += '<td class="description description_' + i + '"><textarea id="description_' + i + '" disabled></textarea></td>';
-                    table += '<td class="tags tags_' + i + '"><input id="tags_' + i + '"></input></td>';
-                    table += '</tr>';
-                    $("#tickets_data").append(table);
+            for (let i = 0; i < test.length; i++) {
+                var table = '<tr id="' + i + '">';
+                table += '<td class="selection selection_' + i + '"><input type="checkbox" class="selection" id="selection_' + i + '"></input></td>';
+                table += '<td class="ticket_id id_' + i + '"> <a id="id_' + i + '" target="_blank"></a></td>';
+                table += '<td class="name name_' + i + '"> <a id="name_' + i + '" target="_blank"></a></td>';
+                table += '<td class="phone phone_' + i + '"" id="phone_' + i + '"></td>';
+                table += '<td class="email email_' + i + '" id="email_' + i + '"></td>';
+                table += '<td class="subject subject_' + i + '"><input id="subject_' + i + '"></input></td>';
+
+                table += '<td class="status status_' + i + '"><select id="status_' + i + '">';
+                table += '<option value="open">open</option>';
+                table += '<option value="pending">pending</option>';
+                table += '<option value="solved">solved</option>';
+                table += '</select></td>';
+
+                table += '<td class="type type_' + i + '"><select id="type_' + i + '">';
+                table += '<option value="" selected disabled>-</option>';
+                table += '<option value="question">question</option>';
+                table += '<option value="incident">incident</option>';
+                table += '<option value="problem">problem</option>';
+                table += '<option value="task">task</option>';
+                table += '</select></td>';
+
+                table += '<td class="description description_' + i + '"><textarea id="description_' + i + '" disabled></textarea></td>';
+                table += '<td class="tags tags_' + i + '"><input id="tags_' + i + '"></input></td>';
+                table += '</tr>';
+                $("#tickets_data").append(table);
+            }
+
+            for (let i = 0; i < k; i++) {
+                ticket_id = response.audits[i].ticket_id;
+
+                $("#id_" + (ticket_id - 1)).attr("href", base_url + "/agent/tickets/" + ticket_id).text(ticket_id);
+                for (let j = 0; j < response.audits[i].events.length; j++) {
+                    if (response.audits[i].events[j].type === "Create" && response.audits[i].events[j].field_name === "subject") {
+                        $("#subject_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
+                    }
                 }
 
-                var j = 0;
-                for (let i = 1; i <= k; i++) {
-                    while (response.tickets[j].id != i) {
-                        i++;
-                    }
-                    var ticket = response.tickets[j];
-                    j++;
-                    var options = {
-                        url: base_url + "/api/v2/users/" + ticket.requester_id + ".json",
-                        type: 'GET',
-                        contentType: "application/json",
-                        cors: true
-                    };
-                    client.request(options).then(
-                        function (requester) {
-                            requester = requester.user;
+                // $("#name_" + i).attr("href", base_url + "/agent/tickets/" + i +
+                //     "/requester/assigned_tickets").text(requester.name);
 
-                            $("#name_" + i).attr("href", base_url + "/agent/tickets/" + i +
-                                "/requester/assigned_tickets").text(requester.name);
-                            //$("#name_" + i).attr("name", requester.id);
+                // $("#phone_" + i).text(requester.phone);
+                // $("#email_" + i).text(requester.email);
+                // var tags = "";
+                // for (var tag in ticket.tags) {
+                //     tags += tag + " ";
+                // }
+                // $("#id_" + i).attr("href", base_url + "/agent/tickets/" + i).text(i);
+                // $("#status_" + i + " option[value='" + ticket.status + "']").attr("selected", "selected");
+                // $("#type_" + i + " option[value='" + ticket.type + "']").attr("selected", "selected");
+                // $("#description_" + i).val(ticket.description);
+                // //$("#tags_" + i).val(ticket.tags);
 
-                            $("#phone_" + i).text(requester.phone);
-                            $("#email_" + i).text(requester.email);
-                        });
-                    var tags = "";
-                    for (var tag in ticket.tags) {
-                        tags += tag + " ";
-                    }
-                    $("#id_" + i).attr("href", base_url + "/agent/tickets/" + i).text(i);
-                    $("#subject_" + i).val(ticket.subject);
-                    $("#status_" + i + " option[value='" + ticket.status + "']").attr("selected", "selected");
-                    $("#type_" + i + " option[value='" + ticket.type + "']").attr("selected", "selected");
-                    $("#description_" + i).val(ticket.description);
-                    $("#tags_" + i).val(ticket.tags);
-
-                }
-                if (isNextPage) {
-                    return incrementPage();
-                }
-
-                return;
-            });
-    }
-
-    incrementPage();
+            }
+        });
 
     $(document).on('change', 'select', function () {
         var id = $(this).attr('id').split("_");
@@ -143,7 +130,7 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) { });
+            function (ticket) {});
 
     });
 
@@ -189,7 +176,7 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) { });
+            function (ticket) {});
     });
 
     $(document).on('click', '#button1', function () {
