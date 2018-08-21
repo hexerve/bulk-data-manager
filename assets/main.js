@@ -35,14 +35,16 @@ $(function () {
             for (i = 0; i < k; i++) {
                 if (!ifExist(response.audits[i].ticket_id)) {
                     test.push(response.audits[i].ticket_id);
-                    if(max < response.audits[i].ticket_id){
+                    if (max < response.audits[i].ticket_id) {
                         max = response.audits[i].ticket_id;
                     }
                 }
             }
 
             i = 0;
-            console.log("max", max);
+            while (!ifExist(i + 1) && i <= max) {
+                i++;
+            }
             for (let j = 0; j < test.length; j++) {
                 var table = '<tr id="' + i + '">';
                 table += '<td class="selection selection_' + i + '"><input type="checkbox" class="selection" id="selection_' + i + '"></input></td>';
@@ -71,7 +73,7 @@ $(function () {
                 table += '</tr>';
                 $("#tickets_data").append(table);
                 i++;
-                while(!ifExist(i + 1) && i <= max){
+                while (!ifExist(i + 1) && i <= max) {
                     i++;
                 }
             }
@@ -86,17 +88,29 @@ $(function () {
                 return false;
             }
 
+            function setAuthor(author_id, id) {
+                for (let i = 0; i < response.users.length; i++) {
+                    if (author_id === response.users[i].id) {
+                        let name = response.users[i].name;
+                        let url = response.users[i].url;
+                        let email = response.users[i].email;
+                        let phone = response.users[i].phone;
+
+
+                        $("#name_" + (id)).attr("href", base_url + "/agent/tickets/" + (id + 1) +
+                            "/requester/assigned_tickets").text(name);
+                        $("#phone_" + (id)).text(phone);
+                        $("#email_" + (id)).text(email);
+                    }
+                }
+            }
+
             for (let i = 0; i < k; i++) {
                 ticket_id = parseInt(response.audits[i].ticket_id);
+                author_id = response.audits[i].author_id;
+                setAuthor(author_id, ticket_id - 1);
 
                 $("#id_" + (ticket_id - 1)).attr("href", base_url + "/agent/tickets/" + ticket_id).text(ticket_id);
-                if (response.audits[i].via) {
-                    $("#name_" + (ticket_id - 1)).attr("href", base_url + "/agent/tickets/" + ticket_id +
-                        "/requester/assigned_tickets").text(response.audits[i].via.source.from.name);
-
-                    $("#phone_" + (ticket_id - 1)).text(response.audits[i].via.source.from.phone);
-                    $("#email_" + (ticket_id - 1)).text(response.audits[i].via.source.from.address);
-                }
                 for (let j = 0; j < response.audits[i].events.length; j++) {
                     if (response.audits[i].events[j].type === "Create" && response.audits[i].events[j].field_name === "subject") {
                         $("#subject_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
@@ -215,8 +229,7 @@ $(function () {
                 };
                 break;
             default:
-                ticket = {};
-                break;
+                return;
         }
 
         ticket = JSON.stringify(ticket);
@@ -513,7 +526,7 @@ $(function () {
         rows = $("#tickets_data TR");
         for (i = parseInt($(rows[1]).attr("id")) - 1; i < rows.length; i++) {
             if ($("#selection_" + i).is(":checked")) {
-                ids += i;
+                ids += i + 1;
                 ids += ",";
             }
         }
