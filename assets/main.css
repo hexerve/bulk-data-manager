@@ -64,7 +64,7 @@ input {
 }
 
 .author_name {
-    color: green;
+    color: #30AABC;
 }
 
 .agent_class .author_name {
@@ -98,7 +98,7 @@ input {
 
 .author_comment {
     margin-bottom: 10px;
-    width: 80%;
+    width: 70%;
 }
 
 select {

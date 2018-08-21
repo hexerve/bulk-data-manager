@@ -122,17 +122,36 @@ $(function () {
                         $("#subject_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
                     }
 
+                    if (response.audits[i].events[j].type === "VoiceComment") {
+                        let author = getAuthor(response.audits[i].events[j].author_id);
+                        var author_class = "agent_class";
+                        if (author.role === "end-user") {
+                            author_class = "requester_class";
+                        }
+
+                        let comment = '<div class="' + author_class + '">' +
+                            '<div class="author_name">' + author.name + '</div>' +
+                            '<div class="author_comment">' +
+                            '<audio controls style="width: 100%;">' +
+                            '<source src="' + response.audits[i].events[j].data.recording_url + '" type="audio/ogg">' +
+                            '<source src="' + response.audits[i].events[j].data.recording_url + '" type="audio/mpeg">' +
+                            '</audio>' +
+                            '</div>' +
+                            '</div>';
+                        $("#description_" + (ticket_id - 1)).append(comment);
+                    }
+
                     if (response.audits[i].events[j].type === "Comment") {
                         let author = getAuthor(response.audits[i].events[j].author_id);
                         var author_class = "agent_class";
-                        if(author.role === "end-user"){
+                        if (author.role === "end-user") {
                             author_class = "requester_class";
                         }
                         let comment = '<div class="' + author_class + '">' +
-                        '<div class="author_name">' + author.name + '</div>' +
-                        '<div class="author_comment">' + response.audits[i].events[j].body + '</div>' +
-                        '</div>';
-                        
+                            '<div class="author_name">' + author.name + '</div>' +
+                            '<div class="author_comment">' + response.audits[i].events[j].body + '</div>' +
+                            '</div>';
+
                         $("#description_" + (ticket_id - 1)).append(comment);
                     }
 
