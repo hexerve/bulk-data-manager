@@ -30,14 +30,20 @@ $(function () {
             }
 
             k = response.audits.length;
+            var max = 0;
 
             for (i = 0; i < k; i++) {
                 if (!ifExist(response.audits[i].ticket_id)) {
                     test.push(response.audits[i].ticket_id);
+                    if(max < response.audits[i].ticket_id){
+                        max = response.audits[i].ticket_id;
+                    }
                 }
             }
 
-            for (let i = 0; i < test.length; i++) {
+            i = 0;
+            console.log("max", max);
+            for (let j = 0; j < test.length; j++) {
                 var table = '<tr id="' + i + '">';
                 table += '<td class="selection selection_' + i + '"><input type="checkbox" class="selection" id="selection_' + i + '"></input></td>';
                 table += '<td class="ticket_id id_' + i + '"> <a id="id_' + i + '" target="_blank"></a></td>';
@@ -64,6 +70,10 @@ $(function () {
                 table += '<td class="tags tags_' + i + '"><input id="tags_' + i + '"></input></td>';
                 table += '</tr>';
                 $("#tickets_data").append(table);
+                i++;
+                while(!ifExist(i + 1) && i <= max){
+                    i++;
+                }
             }
 
             var statuses = [];
