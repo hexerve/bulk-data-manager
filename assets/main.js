@@ -66,13 +66,57 @@ $(function () {
                 $("#tickets_data").append(table);
             }
 
+            var statuses = [];
+            function checkAvailStatus(id) {
+                for (let m = 0; m < statuses.length; m++) {
+                    if (statuses[m] == id) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             for (let i = 0; i < k; i++) {
-                ticket_id = response.audits[i].ticket_id;
+                ticket_id = parseInt(response.audits[i].ticket_id);
 
                 $("#id_" + (ticket_id - 1)).attr("href", base_url + "/agent/tickets/" + ticket_id).text(ticket_id);
+                if (response.audits[i].via) {
+                    $("#name_" + (ticket_id - 1)).attr("href", base_url + "/agent/tickets/" + ticket_id +
+                        "/requester/assigned_tickets").text(response.audits[i].via.source.from.name);
+
+                    $("#phone_" + (ticket_id - 1)).text(response.audits[i].via.source.from.phone);
+                    $("#email_" + (ticket_id - 1)).text(response.audits[i].via.source.from.address);
+                }
                 for (let j = 0; j < response.audits[i].events.length; j++) {
                     if (response.audits[i].events[j].type === "Create" && response.audits[i].events[j].field_name === "subject") {
                         $("#subject_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
+                    }
+
+                    if ((response.audits[i].events[j].type === "Create" || response.audits[i].events[j].type === "Change")) {
+
+                        if (!checkAvailStatus(ticket_id - 1)) {
+                            let field = response.audits[i].events[j].field_name;
+                            if (field === "status") {
+                                statuses.push(ticket_id - 1);
+                                if (response.audits[i].events[j].value === "closed") {
+                                    $("#" + (ticket_id - 1)).addClass("closed");
+                                    $("#status_" + (ticket_id - 1) + " option[value='" + response.audits[i].events[j].previous_value + "']").attr("selected", "selected").attr("disabled", true);
+                                    $("#subject_" + (ticket_id - 1)).attr("disabled", true);
+                                    $("#status_" + (ticket_id - 1)).attr("disabled", true);
+                                    $("#type_" + (ticket_id - 1)).attr("disabled", true);
+                                    $("#tags_" + (ticket_id - 1)).attr("disabled", true);
+                                } else {
+                                    $("#status_" + (ticket_id - 1) + " option[value='" + response.audits[i].events[j].value + "']").attr("selected", "selected");
+                                }
+
+                            } else if (field === "type") {
+                                if (response.audits[i].events[j].value !== null) {
+                                    $("#type_" + (ticket_id - 1) + " option[value='" + response.audits[i].events[j].value + "']").attr("selected", "selected");
+                                }
+                            } else if (field === "tags") {
+                                $("#tags_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
+                            }
+                        }
                     }
                 }
 
@@ -97,7 +141,7 @@ $(function () {
     $(document).on('change', 'select', function () {
         var id = $(this).attr('id').split("_");
         var field_name = id[0];
-        var ticket_id = id[1];
+        var ticket_id = parseInt(id[1]) + 1;
         var value = $(this).val();
         var ticket = {};
 
@@ -130,14 +174,14 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) {});
+            function (ticket) { });
 
     });
 
     $(document).on('change', 'input', function () {
         var id = $(this).attr('id').split("_");
         var field_name = id[0];
-        var ticket_id = id[1];
+        var ticket_id = parseInt(id[1]) + 1;
 
         if (isNaN(ticket_id)) {
             return;
@@ -176,7 +220,7 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) {});
+            function (ticket) { });
     });
 
     $(document).on('click', '#button1', function () {
