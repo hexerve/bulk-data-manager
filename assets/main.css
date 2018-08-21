@@ -42,7 +42,7 @@ td {
     padding-left: 10px;
 }
 
-input, select, textarea, button {
+input, select, div, button {
     line-height: inherit;
     font-family: inherit;
     font-size: 100%;
@@ -55,10 +55,50 @@ input {
     padding-left: 15px;
 }
 
-textarea {
+.description-div {
+    height: 30px;
     overflow-y: scroll;
     width: 100%;
     resize: vertical;
+    padding-right: 5px;
+}
+
+.author_name {
+    color: green;
+}
+
+.agent_class .author_name {
+    text-align: right;
+}
+
+.agent_class {
+    float: right;
+}
+
+.requester_class, .agent_class {
+    width: 100%;
+}
+
+.requester_class .author_comment {
+    background-color: #00303C !important;
+    color: #ffffff;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.agent_class .author_comment {
+    float: right;
+    background-color: #f79a3e !important;
+    color: #ffffff;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.author_comment {
+    margin-bottom: 10px;
+    width: 80%;
 }
 
 select {
@@ -103,10 +143,6 @@ input.selection {
     width: 12px;
     margin-left: 8px;
     margin-right: 8px;
-}
-
-textarea:disabled {
-    color: #909090
 }
 
 .id {
@@ -213,11 +249,11 @@ textarea:disabled {
     background-color: #f2f2f2;
 }
 
-#tickets_data tr:nth-child(even) input, #tickets_data tr:nth-child(even) select,#tickets_data tr:nth-child(even) textarea {
+#tickets_data tr:nth-child(even) input, #tickets_data tr:nth-child(even) select,#tickets_data tr:nth-child(even) div {
     background-color: #f2f2f2;
 }
 
-#tickets_data tr:nth-child(odd) textarea {
+#tickets_data tr:nth-child(odd) div {
     background-color: #fff;
 }
 
@@ -225,7 +261,7 @@ textarea:disabled {
     background-color: #ddd;
 }
 
-#tickets_data tr:hover input, #tickets_data tr:hover select,#tickets_data tr:hover textarea {
+#tickets_data tr:hover input, #tickets_data tr:hover select,#tickets_data tr:hover div {
     background-color: #ddd;
 }
 

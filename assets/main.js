@@ -68,7 +68,7 @@ $(function () {
                 table += '<option value="task">task</option>';
                 table += '</select></td>';
 
-                table += '<td class="description description_' + i + '"><textarea id="description_' + i + '" disabled></textarea></td>';
+                table += '<td class="description description_' + i + '"><div id="description_' + i + '" class="description-div"></div></td>';
                 table += '<td class="tags tags_' + i + '"><input id="tags_' + i + '"></input></td>';
                 table += '</tr>';
                 $("#tickets_data").append(table);
@@ -88,21 +88,27 @@ $(function () {
                 return false;
             }
 
-            function setAuthor(author_id, id) {
+            function getAuthor(author_id) {
+                let author = {};
                 for (let i = 0; i < response.users.length; i++) {
                     if (author_id === response.users[i].id) {
-                        let name = response.users[i].name;
-                        let url = response.users[i].url;
-                        let email = response.users[i].email;
-                        let phone = response.users[i].phone;
-
-
-                        $("#name_" + (id)).attr("href", base_url + "/agent/tickets/" + (id + 1) +
-                            "/requester/assigned_tickets").text(name);
-                        $("#phone_" + (id)).text(phone);
-                        $("#email_" + (id)).text(email);
+                        author.name = response.users[i].name;
+                        author.url = response.users[i].url;
+                        author.email = response.users[i].email;
+                        author.phone = response.users[i].phone;
+                        author.role = response.users[i].role;
                     }
                 }
+                return author;
+            }
+
+            function setAuthor(author_id, id) {
+                let author = getAuthor(author_id);
+                $("#name_" + (id)).attr("href", base_url + "/agent/tickets/" + (id + 1) +
+                    "/requester/assigned_tickets").text(author.name);
+                $("#phone_" + (id)).text(author.phone);
+                $("#email_" + (id)).text(author.email);
+
             }
 
             for (let i = 0; i < k; i++) {
@@ -114,6 +120,20 @@ $(function () {
                 for (let j = 0; j < response.audits[i].events.length; j++) {
                     if (response.audits[i].events[j].type === "Create" && response.audits[i].events[j].field_name === "subject") {
                         $("#subject_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
+                    }
+
+                    if (response.audits[i].events[j].type === "Comment") {
+                        let author = getAuthor(response.audits[i].events[j].author_id);
+                        var author_class = "agent_class";
+                        if(author.role === "end-user"){
+                            author_class = "requester_class";
+                        }
+                        let comment = '<div class="' + author_class + '">' +
+                        '<div class="author_name">' + author.name + '</div>' +
+                        '<div class="author_comment">' + response.audits[i].events[j].body + '</div>' +
+                        '</div>';
+                        
+                        $("#description_" + (ticket_id - 1)).append(comment);
                     }
 
                     if ((response.audits[i].events[j].type === "Create" || response.audits[i].events[j].type === "Change")) {
