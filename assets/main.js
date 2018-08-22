@@ -69,6 +69,7 @@ $(function () {
                 table += '</select></td>';
 
                 table += '<td class="description description_' + i + '"><div id="description_' + i + '" class="description-div"></div></td>';
+                table += '<td class="assets assets_' + i + '"><div id="assets_' + i + '" class="description-div"></div></td>';
                 table += '<td class="tags tags_' + i + '"><input id="tags_' + i + '"></input></td>';
                 table += '</tr>';
                 $("#tickets_data").append(table);
@@ -130,16 +131,20 @@ $(function () {
                             author_class = "requester_class";
                         }
 
+                        let audio = '<audio controls style="width: 100%;">' +
+                            '<source src="' + response.audits[i].events[j].data.recording_url + '" type="audio/ogg">' +
+                            '<source src="' + response.audits[i].events[j].data.recording_url + '" type="audio/mpeg">' +
+                            '</audio>';
+
                         let comment = '<div class="' + author_class + '">' +
                             '<div class="author_name">' + author.name + '</div>' +
                             '<div class="author_comment">' +
-                            '<audio controls style="width: 100%;">' +
-                            '<source src="' + response.audits[i].events[j].data.recording_url + '" type="audio/ogg">' +
-                            '<source src="' + response.audits[i].events[j].data.recording_url + '" type="audio/mpeg">' +
-                            '</audio>' +
+                            audio +
                             '</div>' +
                             '</div>';
                         $("#description_" + (ticket_id - 1)).append(comment);
+                        $("#assets_" + (ticket_id - 1)).append(audio);
+
                     }
 
                     if (response.audits[i].events[j].type === "Comment") {
@@ -154,12 +159,15 @@ $(function () {
                             link = '<br/>';
                         }
                         while (response.audits[i].events[j].attachments.length > n) {
-                            link += '<span class="author_files">' +
-                                '<a href="' + response.audits[i].events[j].attachments[n].content_url + '">' + 
+                            let current_link =
+                                '<a href="' + response.audits[i].events[j].attachments[n].content_url + '">' +
                                 '&#128206;' + response.audits[i].events[j].attachments[n].file_name +
-                                '</a>' +    
+                                '</a>';
+                            link += '<span class="author_files">' +
+                                current_link +
                                 '</span>';
                             n++;
+                            $("#assets_" + (ticket_id - 1)).append(current_link + '<br/>');
                         }
 
                         let comment = '<div class="' + author_class + '">' +
@@ -199,22 +207,6 @@ $(function () {
                         }
                     }
                 }
-
-                // $("#name_" + i).attr("href", base_url + "/agent/tickets/" + i +
-                //     "/requester/assigned_tickets").text(requester.name);
-
-                // $("#phone_" + i).text(requester.phone);
-                // $("#email_" + i).text(requester.email);
-                // var tags = "";
-                // for (var tag in ticket.tags) {
-                //     tags += tag + " ";
-                // }
-                // $("#id_" + i).attr("href", base_url + "/agent/tickets/" + i).text(i);
-                // $("#status_" + i + " option[value='" + ticket.status + "']").attr("selected", "selected");
-                // $("#type_" + i + " option[value='" + ticket.type + "']").attr("selected", "selected");
-                // $("#description_" + i).val(ticket.description);
-                // //$("#tags_" + i).val(ticket.tags);
-
             }
         });
 
@@ -254,7 +246,7 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) { });
+            function (ticket) {});
 
     });
 
@@ -299,7 +291,7 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) { });
+            function (ticket) {});
     });
 
     $(document).on('click', '#button1', function () {
@@ -421,6 +413,21 @@ $(function () {
 
 
     $(document).on('click', '#button9', function () {
+        shiftColumnToBegining("assets");
+        shiftColumnToBegining("selection");
+    });
+
+    $(document).on('click', '#assets_left', function () {
+        shiftLeftColumn("assets");
+        shiftColumnToBegining("selection");
+    });
+
+    $(document).on('click', '#assets_right', function () {
+        shiftRightColumn("assets");
+    });
+
+
+    $(document).on('click', '#button10', function () {
         shiftColumnToBegining("tags");
         shiftColumnToBegining("selection");
     });
@@ -433,6 +440,7 @@ $(function () {
     $(document).on('click', '#tags_right', function () {
         shiftRightColumn("tags");
     });
+
 
     $(document).on('click', '#sort_id', function () {
         sortTable("id");
@@ -460,10 +468,6 @@ $(function () {
 
     $(document).on('click', '#sort_type', function () {
         sortTable("type");
-    });
-
-    $(document).on('click', '#sort_desc', function () {
-        sortTable("description");
     });
 
     $(document).on('click', '#sort_tags', function () {

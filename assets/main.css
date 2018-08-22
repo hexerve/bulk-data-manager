@@ -172,7 +172,7 @@ input.selection {
 }
 
 .subject {
-    width: 15%;
+    width: 12%;
     padding-left: 0 !important;
 }
 
@@ -187,8 +187,12 @@ input.selection {
 }
 
 .description {
-    width: 20%;
+    width: 16%;
     color: #909090;
+}
+
+.assets {
+    width: 8%;
 }
 
 .tags {
