@@ -10,21 +10,42 @@ $(function () {
     var base_url = decodeURIComponent(url[0]);
 
     var options = {
-        url: base_url + "/api/v2/tickets.json",
+        url: base_url + "/api/v2/ticket_audits.json?include=users&comments",
         type: 'GET',
         contentType: "application/json",
         cors: true
     };
     client.request(options).then(
         function (response) {
-            j = 0;
-            k = response.count;
-            for (let i = 1; i <= k; i++) {
-                while (response.tickets[j].id != i) {
-                    i++;
-                    k++;
+
+            let test = [];
+
+            function ifExist(id) {
+                for (j = 0; j < test.length; j++) {
+                    if (id == test[j]) {
+                        return true;
+                    }
                 }
-                j++;
+                return false;
+            }
+
+            k = response.audits.length;
+            var max = 0;
+
+            for (i = 0; i < k; i++) {
+                if (!ifExist(response.audits[i].ticket_id)) {
+                    test.push(response.audits[i].ticket_id);
+                    if (max < response.audits[i].ticket_id) {
+                        max = response.audits[i].ticket_id;
+                    }
+                }
+            }
+
+            i = 0;
+            while (!ifExist(i + 1) && i <= max) {
+                i++;
+            }
+            for (let j = 0; j < test.length; j++) {
                 var table = '<tr id="' + i + '">';
                 table += '<td class="selection selection_' + i + '"><input type="checkbox" class="selection" id="selection_' + i + '"></input></td>';
                 table += '<td class="ticket_id id_' + i + '"> <a id="id_' + i + '" target="_blank"></a></td>';
@@ -32,7 +53,7 @@ $(function () {
                 table += '<td class="phone phone_' + i + '"" id="phone_' + i + '"></td>';
                 table += '<td class="email email_' + i + '" id="email_' + i + '"></td>';
                 table += '<td class="subject subject_' + i + '"><input id="subject_' + i + '"></input></td>';
-                
+
                 table += '<td class="status status_' + i + '"><select id="status_' + i + '">';
                 table += '<option value="open">open</option>';
                 table += '<option value="pending">pending</option>';
@@ -47,46 +68,152 @@ $(function () {
                 table += '<option value="task">task</option>';
                 table += '</select></td>';
 
-                table += '<td class="description description_' + i + '"><textarea id="description_' + i + '" disabled></textarea></td>';
+                table += '<td class="description description_' + i + '"><div id="description_' + i + '" class="description-div"></div></td>';
                 table += '<td class="tags tags_' + i + '"><input id="tags_' + i + '"></input></td>';
                 table += '</tr>';
                 $("#tickets_data").append(table);
-            }
-
-            var j = 0;
-            for (let i = 1; i <= k; i++) {
-                while (response.tickets[j].id != i) {
+                i++;
+                while (!ifExist(i + 1) && i <= max) {
                     i++;
                 }
-                var ticket = response.tickets[j];
-                j++;
-                var options = {
-                    url: base_url + "/api/v2/users/" + ticket.requester_id + ".json",
-                    type: 'GET',
-                    contentType: "application/json",
-                    cors: true
-                };
-                client.request(options).then(
-                    function (requester) {
-                        requester = requester.user;
+            }
 
-                        $("#name_" + i).attr("href", base_url + "/agent/tickets/" + i +
-                            "/requester/assigned_tickets").text(requester.name);
-                        //$("#name_" + i).attr("name", requester.id);
+            var statuses = [];
 
-                        $("#phone_" + i).text(requester.phone);
-                        $("#email_" + i).text(requester.email);
-                    });
-                var tags = "";
-                for (var tag in ticket.tags) {
-                    tags += tag + " ";
+            function checkAvailStatus(id) {
+                for (let m = 0; m < statuses.length; m++) {
+                    if (statuses[m] == id) {
+                        return true;
+                    }
                 }
-                $("#id_" + i).attr("href", base_url + "/agent/tickets/" + i).text(i);
-                $("#subject_" + i).val(ticket.subject);
-                $("#status_" + i + " option[value='" + ticket.status + "']").attr("selected", "selected");
-                $("#type_" + i + " option[value='" + ticket.type + "']").attr("selected", "selected");
-                $("#description_" + i).val(ticket.description);
-                $("#tags_" + i).val(ticket.tags);
+                return false;
+            }
+
+            function getAuthor(author_id) {
+                let author = {};
+                for (let i = 0; i < response.users.length; i++) {
+                    if (author_id === response.users[i].id) {
+                        author.name = response.users[i].name;
+                        author.url = response.users[i].url;
+                        author.email = response.users[i].email;
+                        author.phone = response.users[i].phone;
+                        author.role = response.users[i].role;
+                    }
+                }
+                return author;
+            }
+
+            function setAuthor(author_id, id) {
+                let author = getAuthor(author_id);
+                $("#name_" + (id)).attr("href", base_url + "/agent/tickets/" + (id + 1) +
+                    "/requester/assigned_tickets").text(author.name);
+                $("#phone_" + (id)).text(author.phone);
+                $("#email_" + (id)).text(author.email);
+
+            }
+
+            for (let i = 0; i < k; i++) {
+                ticket_id = parseInt(response.audits[i].ticket_id);
+                author_id = response.audits[i].author_id;
+                setAuthor(author_id, ticket_id - 1);
+
+                $("#id_" + (ticket_id - 1)).attr("href", base_url + "/agent/tickets/" + ticket_id).text(ticket_id);
+                for (let j = 0; j < response.audits[i].events.length; j++) {
+                    if (response.audits[i].events[j].type === "Create" && response.audits[i].events[j].field_name === "subject") {
+                        $("#subject_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
+                    }
+
+                    if (response.audits[i].events[j].type === "VoiceComment") {
+                        let author = getAuthor(response.audits[i].events[j].author_id);
+                        var author_class = "agent_class";
+                        if (author.role === "end-user") {
+                            author_class = "requester_class";
+                        }
+
+                        let comment = '<div class="' + author_class + '">' +
+                            '<div class="author_name">' + author.name + '</div>' +
+                            '<div class="author_comment">' +
+                            '<audio controls style="width: 100%;">' +
+                            '<source src="' + response.audits[i].events[j].data.recording_url + '" type="audio/ogg">' +
+                            '<source src="' + response.audits[i].events[j].data.recording_url + '" type="audio/mpeg">' +
+                            '</audio>' +
+                            '</div>' +
+                            '</div>';
+                        $("#description_" + (ticket_id - 1)).append(comment);
+                    }
+
+                    if (response.audits[i].events[j].type === "Comment") {
+                        let author = getAuthor(response.audits[i].events[j].author_id);
+                        var author_class = "agent_class";
+                        if (author.role === "end-user") {
+                            author_class = "requester_class";
+                        }
+                        let n = 0;
+                        let link = "";
+                        if (response.audits[i].events[j].attachments.length > n) {
+                            link = '<br/>';
+                        }
+                        while (response.audits[i].events[j].attachments.length > n) {
+                            link += '<span class="author_files">' +
+                                '<a href="' + response.audits[i].events[j].attachments[n].content_url + '">' + 
+                                '&#128206;' + response.audits[i].events[j].attachments[n].file_name +
+                                '</a>' +    
+                                '</span>';
+                            n++;
+                        }
+
+                        let comment = '<div class="' + author_class + '">' +
+                            '<div class="author_name">' + author.name + '</div>' +
+                            '<div class="author_comment">' + response.audits[i].events[j].body +
+                            link +
+                            '</div>' +
+                            '</div>';
+
+                        $("#description_" + (ticket_id - 1)).append(comment);
+                    }
+
+                    if ((response.audits[i].events[j].type === "Create" || response.audits[i].events[j].type === "Change")) {
+
+                        if (!checkAvailStatus(ticket_id - 1)) {
+                            let field = response.audits[i].events[j].field_name;
+                            if (field === "status") {
+                                statuses.push(ticket_id - 1);
+                                if (response.audits[i].events[j].value === "closed") {
+                                    $("#" + (ticket_id - 1)).addClass("closed");
+                                    $("#status_" + (ticket_id - 1) + " option[value='" + response.audits[i].events[j].previous_value + "']").attr("selected", "selected").attr("disabled", true);
+                                    $("#subject_" + (ticket_id - 1)).attr("disabled", true);
+                                    $("#status_" + (ticket_id - 1)).attr("disabled", true);
+                                    $("#type_" + (ticket_id - 1)).attr("disabled", true);
+                                    $("#tags_" + (ticket_id - 1)).attr("disabled", true);
+                                } else {
+                                    $("#status_" + (ticket_id - 1) + " option[value='" + response.audits[i].events[j].value + "']").attr("selected", "selected");
+                                }
+
+                            } else if (field === "type") {
+                                if (response.audits[i].events[j].value !== null) {
+                                    $("#type_" + (ticket_id - 1) + " option[value='" + response.audits[i].events[j].value + "']").attr("selected", "selected");
+                                }
+                            } else if (field === "tags") {
+                                $("#tags_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
+                            }
+                        }
+                    }
+                }
+
+                // $("#name_" + i).attr("href", base_url + "/agent/tickets/" + i +
+                //     "/requester/assigned_tickets").text(requester.name);
+
+                // $("#phone_" + i).text(requester.phone);
+                // $("#email_" + i).text(requester.email);
+                // var tags = "";
+                // for (var tag in ticket.tags) {
+                //     tags += tag + " ";
+                // }
+                // $("#id_" + i).attr("href", base_url + "/agent/tickets/" + i).text(i);
+                // $("#status_" + i + " option[value='" + ticket.status + "']").attr("selected", "selected");
+                // $("#type_" + i + " option[value='" + ticket.type + "']").attr("selected", "selected");
+                // $("#description_" + i).val(ticket.description);
+                // //$("#tags_" + i).val(ticket.tags);
 
             }
         });
@@ -94,7 +221,7 @@ $(function () {
     $(document).on('change', 'select', function () {
         var id = $(this).attr('id').split("_");
         var field_name = id[0];
-        var ticket_id = id[1];
+        var ticket_id = parseInt(id[1]) + 1;
         var value = $(this).val();
         var ticket = {};
 
@@ -134,7 +261,7 @@ $(function () {
     $(document).on('change', 'input', function () {
         var id = $(this).attr('id').split("_");
         var field_name = id[0];
-        var ticket_id = id[1];
+        var ticket_id = parseInt(id[1]) + 1;
 
         if (isNaN(ticket_id)) {
             return;
@@ -158,8 +285,7 @@ $(function () {
                 };
                 break;
             default:
-                ticket = {};
-                break;
+                return;
         }
 
         ticket = JSON.stringify(ticket);
@@ -456,7 +582,7 @@ $(function () {
         rows = $("#tickets_data TR");
         for (i = parseInt($(rows[1]).attr("id")) - 1; i < rows.length; i++) {
             if ($("#selection_" + i).is(":checked")) {
-                ids += i;
+                ids += i + 1;
                 ids += ",";
             }
         }
