@@ -42,7 +42,7 @@ td {
     padding-left: 10px;
 }
 
-input, select, textarea, button {
+input, select, div, button {
     line-height: inherit;
     font-family: inherit;
     font-size: 100%;
@@ -52,17 +52,67 @@ input, select, textarea, button {
 input {
     width: 100%;
     height: 100%;
+    padding-left: 15px;
 }
 
-textarea {
+.description-div {
+    height: 30px;
     overflow-y: scroll;
     width: 100%;
     resize: vertical;
+    padding-right: 5px;
+}
+
+.author_name {
+    color: #30AABC;
+}
+
+.agent_class .author_name {
+    text-align: right;
+}
+
+.agent_class {
+    float: right;
+}
+
+.requester_class, .agent_class {
+    width: 100%;
+}
+
+.requester_class .author_comment {
+    background-color: #00303C !important;
+    color: #ffffff;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.agent_class .author_comment {
+    float: right;
+    background-color: #f79a3e !important;
+    color: #ffffff;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.author_comment {
+    margin-bottom: 10px;
+    width: 70%;
+}
+
+.author_files {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    display: block;
+    padding: 5px 5px 5px;
+    margin: 5px 0%;
 }
 
 select {
     height: 100%;
     width: 100%;
+    padding-left: 15px;
 }
 
 a {
@@ -103,10 +153,6 @@ input.selection {
     margin-right: 8px;
 }
 
-textarea:disabled {
-    color: #909090
-}
-
 .id {
     width: 8%;
 }
@@ -127,14 +173,17 @@ textarea:disabled {
 
 .subject {
     width: 15%;
+    padding-left: 0 !important;
 }
 
 .status {
     width: 8%;
+    padding-left: 0px !important;
 }
 
 .type {
     width: 8%;
+    padding-left: 0px !important;
 }
 
 .description {
@@ -144,6 +193,7 @@ textarea:disabled {
 
 .tags {
     width: 10%;
+    padding-left: 0px !important;
 }
 
 .shift_button {
@@ -190,6 +240,10 @@ textarea:disabled {
     margin-right: 5px;
 }
 
+.closed {
+    color: #909090;
+}
+
 #tickets_data {
     border-collapse: collapse;
     width: 100%;
@@ -203,11 +257,11 @@ textarea:disabled {
     background-color: #f2f2f2;
 }
 
-#tickets_data tr:nth-child(even) input, #tickets_data tr:nth-child(even) select,#tickets_data tr:nth-child(even) textarea {
+#tickets_data tr:nth-child(even) input, #tickets_data tr:nth-child(even) select,#tickets_data tr:nth-child(even) div {
     background-color: #f2f2f2;
 }
 
-#tickets_data tr:nth-child(odd) textarea {
+#tickets_data tr:nth-child(odd) div {
     background-color: #fff;
 }
 
@@ -215,7 +269,7 @@ textarea:disabled {
     background-color: #ddd;
 }
 
-#tickets_data tr:hover input, #tickets_data tr:hover select,#tickets_data tr:hover textarea {
+#tickets_data tr:hover input, #tickets_data tr:hover select,#tickets_data tr:hover div {
     background-color: #ddd;
 }
 
