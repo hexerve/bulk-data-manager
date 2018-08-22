@@ -79,6 +79,7 @@ $(function () {
             }
 
             var statuses = [];
+
             function checkAvailStatus(id) {
                 for (let m = 0; m < statuses.length; m++) {
                     if (statuses[m] == id) {
@@ -147,9 +148,25 @@ $(function () {
                         if (author.role === "end-user") {
                             author_class = "requester_class";
                         }
+                        let n = 0;
+                        let link = "";
+                        if (response.audits[i].events[j].attachments.length > n) {
+                            link = '<br/>';
+                        }
+                        while (response.audits[i].events[j].attachments.length > n) {
+                            link += '<span class="author_files">' +
+                                '<a href="' + response.audits[i].events[j].attachments[n].content_url + '">' + 
+                                '&#128206;' + response.audits[i].events[j].attachments[n].file_name +
+                                '</a>' +    
+                                '</span>';
+                            n++;
+                        }
+
                         let comment = '<div class="' + author_class + '">' +
                             '<div class="author_name">' + author.name + '</div>' +
-                            '<div class="author_comment">' + response.audits[i].events[j].body + '</div>' +
+                            '<div class="author_comment">' + response.audits[i].events[j].body +
+                            link +
+                            '</div>' +
                             '</div>';
 
                         $("#description_" + (ticket_id - 1)).append(comment);

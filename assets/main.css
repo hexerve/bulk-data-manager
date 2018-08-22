@@ -101,6 +101,14 @@ input {
     width: 70%;
 }
 
+.author_files {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    display: block;
+    padding: 5px 5px 5px;
+    margin: 5px 0%;
+}
+
 select {
     height: 100%;
     width: 100%;
