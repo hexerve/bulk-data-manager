@@ -116,6 +116,11 @@ $(function () {
             for (let i = 0; i < k; i++) {
                 ticket_id = parseInt(response.audits[i].ticket_id);
                 author_id = response.audits[i].author_id;
+                if(author_id === -1){
+                    if (response.audits[i].events && response.audits[i].events[0].author_id){
+                        author_id = response.audits[i].events[0].author_id;
+                    }
+                }
                 setAuthor(author_id, ticket_id - 1);
 
                 $("#id_" + (ticket_id - 1)).attr("href", base_url + "/agent/tickets/" + ticket_id).text(ticket_id);
