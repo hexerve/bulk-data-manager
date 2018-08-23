@@ -661,4 +661,20 @@ $(function () {
         }
     }
 
+    $(document).on('mouseleave', '.description-div', function (e) {
+        $("#assets_" + $(e.currentTarget).attr('id').split("_")[1]).attr("style", "height:" + $(e.currentTarget).height());
+    });
+
+    $(document).on('mouseenter', '.description-div', function (e) {
+        $("#assets_" + $(e.currentTarget).attr('id').split("_")[1]).attr("style", "height:" + $(e.currentTarget).height());
+    });
+
+    $(document).on('mouseenter', '.assets_div', function (e) {
+        $("#description_" + $(e.currentTarget).attr('id').split("_")[1]).attr("style", "height:" + $(e.currentTarget).height());
+    });
+
+    $(document).on('mouseleave', '.assets_div', function (e) {
+        $("#description_" + $(e.currentTarget).attr('id').split("_")[1]).attr("style", "height:" + $(e.currentTarget).height());
+    });
+    
 });

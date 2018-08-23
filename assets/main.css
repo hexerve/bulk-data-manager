@@ -213,7 +213,12 @@ input.selection {
 }
 
 .assets_div {
+    /* resize: inherit; */
+    height: 30px;
+    overflow-y: scroll;
+    width: 100%;
     resize: vertical;
+    padding-right: 5px;
 }
 
 .tags {
