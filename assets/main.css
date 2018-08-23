@@ -115,6 +115,13 @@ select {
     padding-left: 15px;
 }
 
+.comment_text {
+    height: 30px !important;
+    border: 2px solid #30AABC;
+    border-radius: 5px;
+    width: 80%;
+}
+
 a {
     color: #30aabc;
     text-decoration: none;
@@ -193,6 +200,20 @@ input.selection {
 
 .assets {
     width: 8%;
+    height: 30px;
+}
+
+.comment {
+    float: right;
+    margin: 0 5px;
+    padding: 4px 8px;
+    color: #f1f1f1;
+    background-color: #00303C;
+    border-radius: 4px;
+}
+
+.assets_div {
+    resize: vertical;
 }
 
 .tags {

@@ -68,8 +68,13 @@ $(function () {
                 table += '<option value="task">task</option>';
                 table += '</select></td>';
 
-                table += '<td class="description description_' + i + '"><div id="description_' + i + '" class="description-div"></div></td>';
-                table += '<td class="assets assets_' + i + '"><div id="assets_' + i + '" class="description-div"></div></td>';
+                table += '<td class="description description_' + i + '">' +
+                    '<div id="description_' + i + '" class="description-div">' +
+                    '<input class="comment_text" id="comment_' + i + '" type="text" placeholder="Type your message here"></input>' +
+                    '<button class="comment comment_button" id="comment_btn_' + i + '" ticket_id="' + (i + 1) + '" type="button"> Submit </button>' +
+                    '</div>' +
+                    '</td>';
+                table += '<td class="assets assets_' + i + '"><div id="assets_' + i + '" class="assets_div"></div></td>';
                 table += '<td class="tags tags_' + i + '"><input id="tags_' + i + '"></input></td>';
                 table += '</tr>';
                 $("#tickets_data").append(table);
@@ -116,8 +121,8 @@ $(function () {
             for (let i = 0; i < k; i++) {
                 ticket_id = parseInt(response.audits[i].ticket_id);
                 author_id = response.audits[i].author_id;
-                if(author_id === -1){
-                    if (response.audits[i].events && response.audits[i].events[0].author_id){
+                if (author_id === -1) {
+                    if (response.audits[i].events && response.audits[i].events[0].author_id) {
                         author_id = response.audits[i].events[0].author_id;
                     }
                 }
@@ -197,6 +202,8 @@ $(function () {
                                     $("#subject_" + (ticket_id - 1)).attr("disabled", true);
                                     $("#status_" + (ticket_id - 1)).attr("disabled", true);
                                     $("#type_" + (ticket_id - 1)).attr("disabled", true);
+                                    $("#comment_" + (ticket_id - 1)).attr("style", "display:none");
+                                    $("#comment_btn_" + (ticket_id - 1)).attr("style", "display:none");
                                     $("#tags_" + (ticket_id - 1)).attr("disabled", true);
                                 } else {
                                     $("#status_" + (ticket_id - 1) + " option[value='" + response.audits[i].events[j].value + "']").attr("selected", "selected");
@@ -297,6 +304,12 @@ $(function () {
 
         client.request(options).then(
             function (ticket) {});
+    });
+
+    $(document).on('click', '.comment_button', function () {
+        var id = parseInt($(this).attr('ticket_id'));
+        var comment = $('#comment_' + (id - 1)).val();
+        addComment(id, comment);
     });
 
     $(document).on('click', '#button1', function () {
@@ -610,6 +623,41 @@ $(function () {
                 });
             location.reload(true);
 
+        }
+    }
+
+    function addComment(id, comment) {
+        id = parseInt(id);
+        if (comment === "") {
+            console.log("no body");
+            return;
+        }
+        data = {
+            ticket: {
+                "id": id,
+                "comment": comment
+            }
+        };
+        if (id) {
+            var options = {
+                url: base_url + "/api/v2/tickets/" + id + ".json",
+                type: 'PUT',
+                contentType: "application/json",
+                cors: true,
+                data: JSON.stringify(data)
+            };
+            client.request(options).then(
+                function (response) {
+                    let author_name = response.audit.events[0].author_id;
+                    let comment = '<div class="agent_class">' +
+                        '<div class="author_name">' + author_name + '</div>' +
+                        '<div class="author_comment">' +
+                        response.audit.events[0].body + 
+                        '</div>' +
+                        '</div>';
+                    $(comment).insertAfter("#description_" + (id - 1) + " button");
+                    $('#comment_' + (id - 1)).val("");
+                });
         }
     }
 
