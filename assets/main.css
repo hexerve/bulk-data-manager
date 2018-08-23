@@ -115,6 +115,13 @@ select {
     padding-left: 15px;
 }
 
+.comment_text {
+    height: 30px !important;
+    border: 2px solid #30AABC;
+    border-radius: 5px;
+    width: 80%;
+}
+
 a {
     color: #30aabc;
     text-decoration: none;
@@ -172,7 +179,7 @@ input.selection {
 }
 
 .subject {
-    width: 15%;
+    width: 12%;
     padding-left: 0 !important;
 }
 
@@ -187,8 +194,31 @@ input.selection {
 }
 
 .description {
-    width: 20%;
+    width: 16%;
     color: #909090;
+}
+
+.assets {
+    width: 8%;
+    height: 30px;
+}
+
+.comment {
+    float: right;
+    margin: 0 5px;
+    padding: 4px 8px;
+    color: #f1f1f1;
+    background-color: #00303C;
+    border-radius: 4px;
+}
+
+.assets_div {
+    /* resize: inherit; */
+    height: 30px;
+    overflow-y: scroll;
+    width: 100%;
+    resize: vertical;
+    padding-right: 5px;
 }
 
 .tags {
