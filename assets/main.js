@@ -258,7 +258,7 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) {});
+            function (ticket) { });
 
     });
 
@@ -303,7 +303,7 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) {});
+            function (ticket) { });
     });
 
     $(document).on('click', '.comment_button', function () {
@@ -619,7 +619,6 @@ $(function () {
             };
             client.request(options).then(
                 function (response) {
-                    console.log(response);
                 });
             location.reload(true);
 
@@ -629,7 +628,6 @@ $(function () {
     function addComment(id, comment) {
         id = parseInt(id);
         if (comment === "") {
-            console.log("no body");
             return;
         }
         data = {
@@ -648,11 +646,24 @@ $(function () {
             };
             client.request(options).then(
                 function (response) {
-                    let author_name = response.audit.events[0].author_id;
+                    let special_id = "author_" + new Date().getTime().toString() +
+                        Math.floor((Math.random() * 100000) + 1);
+
+                    var option = {
+                        url: base_url + "/api/v2/users/" + response.audit.events[0].author_id + ".json",
+                        type: 'GET',
+                        contentType: "application/json",
+                        cors: true
+                    };
+                    client.request(option).then(
+                        function (user) {
+                            $('#' + special_id).text(user.user.name);
+                        });
+                
                     let comment = '<div class="agent_class">' +
-                        '<div class="author_name">' + author_name + '</div>' +
+                        '<div class="author_name" id="' + special_id + '">You</div>' +
                         '<div class="author_comment">' +
-                        response.audit.events[0].body + 
+                        response.audit.events[0].body +
                         '</div>' +
                         '</div>';
                     $(comment).insertAfter("#description_" + (id - 1) + " button");
@@ -676,5 +687,5 @@ $(function () {
     $(document).on('mouseleave', '.assets_div', function (e) {
         $("#description_" + $(e.currentTarget).attr('id').split("_")[1]).attr("style", "height:" + $(e.currentTarget).height());
     });
-    
+
 });
