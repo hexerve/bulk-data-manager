@@ -309,3 +309,7 @@ input.selection {
     background-color: #30AABC;
     color: white;
 }
+
+.comment_button:active {
+    background-color: #006984
+}
