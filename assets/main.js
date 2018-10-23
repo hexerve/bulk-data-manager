@@ -97,6 +97,7 @@ $(function () {
 
             function getAuthor(author_id) {
                 let author = {};
+                console.log(author_id)
                 for (let i = 0; i < response.users.length; i++) {
                     if (author_id === response.users[i].id) {
                         author.name = response.users[i].name;
@@ -104,6 +105,7 @@ $(function () {
                         author.email = response.users[i].email;
                         author.phone = response.users[i].phone;
                         author.role = response.users[i].role;
+                        return author;
                     }
                 }
                 return author;
@@ -120,18 +122,15 @@ $(function () {
 
             for (let i = 0; i < k; i++) {
                 ticket_id = parseInt(response.audits[i].ticket_id);
-                author_id = response.audits[i].author_id;
-                if (author_id === -1) {
-                    if (response.audits[i].events && response.audits[i].events[0].author_id) {
-                        author_id = response.audits[i].events[0].author_id;
-                    }
-                }
-                setAuthor(author_id, ticket_id - 1);
 
                 $("#id_" + (ticket_id - 1)).attr("href", base_url + "/agent/tickets/" + ticket_id).text(ticket_id);
                 for (let j = 0; j < response.audits[i].events.length; j++) {
                     if (response.audits[i].events[j].type === "Create" && response.audits[i].events[j].field_name === "subject") {
                         $("#subject_" + (ticket_id - 1)).val(response.audits[i].events[j].value);
+                    }
+
+                    if (response.audits[i].events[j].type === "Create" && response.audits[i].events[j].field_name === "requester_id") {
+                        setAuthor(parseInt(response.audits[i].events[j].value), ticket_id - 1);
                     }
 
                     if (response.audits[i].events[j].type === "VoiceComment") {
@@ -659,7 +658,7 @@ $(function () {
                         function (user) {
                             $('#' + special_id).text(user.user.name);
                         });
-                
+
                     let comment = '<div class="agent_class">' +
                         '<div class="author_name" id="' + special_id + '">You</div>' +
                         '<div class="author_comment">' +
