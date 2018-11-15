@@ -226,6 +226,11 @@ input.selection {
     padding-left: 0px !important;
 }
 
+.checkbox {
+    width: 30px;
+    height: 15px;
+}
+
 .shift_button {
     background-color: #30AABC;
     color: #fff;
