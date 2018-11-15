@@ -169,7 +169,7 @@ $(function () {
                         }
                         while (response.audits[i].events[j].attachments.length > n) {
                             let current_link =
-                                '<a href="' + response.audits[i].events[j].attachments[n].content_url + '">' +
+                                '<a href="' + response.audits[i].events[j].attachments[n].content_url + '" target="_blank">' +
                                 '&#128206;' + response.audits[i].events[j].attachments[n].file_name +
                                 '</a>';
                             link += '<span class="author_files">' +

@@ -55,6 +55,10 @@ input {
     padding-left: 15px;
 }
 
+.internal {
+    padding-left: 92px;
+}
+
 .description-div {
     height: 30px;
     overflow-y: scroll;
@@ -122,6 +126,10 @@ select {
     width: 80%;
 }
 
+.description-div {
+    min-height: 30px;
+}
+
 a {
     color: #30aabc;
     text-decoration: none;
@@ -184,12 +192,12 @@ input.selection {
 }
 
 .status {
-    width: 8%;
+    width: 7%;
     padding-left: 0px !important;
 }
 
 .type {
-    width: 6%;
+    width: 7%;
     padding-left: 0px !important;
 }
 
@@ -285,7 +293,7 @@ input.selection {
 }
 
 #tickets_data td, #tickets_data th {
-    border: 1px solid #ddd;
+    border: 3px solid #ddd;
 }
 
 #tickets_data tr:nth-child(even){
