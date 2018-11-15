@@ -23,7 +23,7 @@ html {
 }
 
 body {
-    width: 3000px;
+    width: 2900px;
 }
 
 table {
@@ -161,11 +161,11 @@ input.selection {
 }
 
 .id {
-    width: 8%;
+    width: 6%;
 }
 
 .name {
-    width: 10%;
+    width: 8%;
 }
 
 .phone {
@@ -174,7 +174,7 @@ input.selection {
 }
 
 .email {
-    width: 12%;
+    width: 10%;
     color: #909090;
 }
 
@@ -189,17 +189,17 @@ input.selection {
 }
 
 .type {
-    width: 8%;
+    width: 6%;
     padding-left: 0px !important;
 }
 
 .description {
-    width: 16%;
+    width: 20%;
     color: #909090;
 }
 
 .assets {
-    width: 8%;
+    width: 10%;
     height: 30px;
 }
 
