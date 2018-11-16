@@ -71,6 +71,7 @@ $(function () {
                 table += '<td class="description description_' + i + '">' +
                     '<div id="description_' + i + '" class="description-div">' +
                     '<input class="comment_text" id="comment_' + i + '" type="text" placeholder="Type your message here"></input>' +
+                    '<input class="checkbox internalComment" id="privateComment_' + i + '" type="checkbox"></input>' +
                     '<button class="comment comment_button" id="comment_btn_' + i + '" ticket_id="' + (i + 1) + '" type="button"> Submit </button>' +
                     '</div>' +
                     '</td>';
@@ -97,7 +98,6 @@ $(function () {
 
             function getAuthor(author_id) {
                 let author = {};
-                console.log(author_id)
                 for (let i = 0; i < response.users.length; i++) {
                     if (author_id === response.users[i].id) {
                         author.name = response.users[i].name;
@@ -169,7 +169,7 @@ $(function () {
                         }
                         while (response.audits[i].events[j].attachments.length > n) {
                             let current_link =
-                                '<a href="' + response.audits[i].events[j].attachments[n].content_url + '">' +
+                                '<a href="' + response.audits[i].events[j].attachments[n].content_url + '" target="_blank">' +
                                 '&#128206;' + response.audits[i].events[j].attachments[n].file_name +
                                 '</a>';
                             link += '<span class="author_files">' +
@@ -203,6 +203,7 @@ $(function () {
                                     $("#type_" + (ticket_id - 1)).attr("disabled", true);
                                     $("#comment_" + (ticket_id - 1)).attr("style", "display:none");
                                     $("#comment_btn_" + (ticket_id - 1)).attr("style", "display:none");
+                                    $("#privateComment_" + (ticket_id - 1)).attr("style", "display:none");
                                     $("#tags_" + (ticket_id - 1)).attr("disabled", true);
                                 } else {
                                     $("#status_" + (ticket_id - 1) + " option[value='" + response.audits[i].events[j].value + "']").attr("selected", "selected");
@@ -257,7 +258,7 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) { });
+            function (ticket) {});
 
     });
 
@@ -302,13 +303,14 @@ $(function () {
         };
 
         client.request(options).then(
-            function (ticket) { });
+            function (ticket) {});
     });
 
     $(document).on('click', '.comment_button', function () {
         var id = parseInt($(this).attr('ticket_id'));
         var comment = $('#comment_' + (id - 1)).val();
-        addComment(id, comment);
+        var isPrivate = document.getElementById('privateComment_' + (id - 1)).checked;
+        addComment(id, comment, isPrivate);
     });
 
     $(document).on('click', '#button1', function () {
@@ -617,14 +619,13 @@ $(function () {
                 cors: true
             };
             client.request(options).then(
-                function (response) {
-                });
+                function (response) {});
             location.reload(true);
 
         }
     }
 
-    function addComment(id, comment) {
+    function addComment(id, comment, isPrivate) {
         id = parseInt(id);
         if (comment === "") {
             return;
@@ -632,9 +633,16 @@ $(function () {
         data = {
             ticket: {
                 "id": id,
-                "comment": comment
+                "comment": {
+                    body: comment
+                }
             }
         };
+
+        if (isPrivate) {
+            data.ticket.comment.public = false;
+        }
+
         if (id) {
             var options = {
                 url: base_url + "/api/v2/tickets/" + id + ".json",
@@ -643,6 +651,7 @@ $(function () {
                 cors: true,
                 data: JSON.stringify(data)
             };
+
             client.request(options).then(
                 function (response) {
                     let special_id = "author_" + new Date().getTime().toString() +
@@ -670,6 +679,17 @@ $(function () {
                 });
         }
     }
+
+    $(document).on('click', '#privateCommentAll', function () {
+        $('.internalComment').trigger('click');
+    })
+
+    $(document).on('click', '.internalComment', function (e) {
+        let ele = $('#comment_' + $(e.currentTarget).attr('id').split("_")[1]);
+        console.log(ele)
+        ele.hasClass('internal-text') ? ele.removeClass('internal-text') : ele.addClass('internal-text')
+
+    })
 
     $(document).on('mouseleave', '.description-div', function (e) {
         $("#assets_" + $(e.currentTarget).attr('id').split("_")[1]).attr("style", "height:" + $(e.currentTarget).height());

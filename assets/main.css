@@ -23,7 +23,7 @@ html {
 }
 
 body {
-    width: 3000px;
+    width: 2900px;
 }
 
 table {
@@ -53,6 +53,15 @@ input {
     width: 100%;
     height: 100%;
     padding-left: 15px;
+}
+
+.internal {
+    padding-left: 92px;
+    color: rgb(251, 182, 113);
+}
+
+.internal-text {
+    border-color: #F79A3E !important;
 }
 
 .description-div {
@@ -122,6 +131,10 @@ select {
     width: 80%;
 }
 
+.description-div {
+    min-height: 30px;
+}
+
 a {
     color: #30aabc;
     text-decoration: none;
@@ -161,11 +174,11 @@ input.selection {
 }
 
 .id {
-    width: 8%;
+    width: 6%;
 }
 
 .name {
-    width: 10%;
+    width: 8%;
 }
 
 .phone {
@@ -174,7 +187,7 @@ input.selection {
 }
 
 .email {
-    width: 12%;
+    width: 10%;
     color: #909090;
 }
 
@@ -184,22 +197,22 @@ input.selection {
 }
 
 .status {
-    width: 8%;
+    width: 7%;
     padding-left: 0px !important;
 }
 
 .type {
-    width: 8%;
+    width: 7%;
     padding-left: 0px !important;
 }
 
 .description {
-    width: 16%;
+    width: 20%;
     color: #909090;
 }
 
 .assets {
-    width: 8%;
+    width: 10%;
     height: 30px;
 }
 
@@ -224,6 +237,11 @@ input.selection {
 .tags {
     width: 10%;
     padding-left: 0px !important;
+}
+
+.checkbox {
+    width: 30px;
+    height: 15px;
 }
 
 .shift_button {
@@ -280,7 +298,7 @@ input.selection {
 }
 
 #tickets_data td, #tickets_data th {
-    border: 1px solid #ddd;
+    border: 3px solid #ddd;
 }
 
 #tickets_data tr:nth-child(even){
