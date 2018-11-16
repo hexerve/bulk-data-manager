@@ -57,6 +57,11 @@ input {
 
 .internal {
     padding-left: 92px;
+    color: rgb(251, 182, 113);
+}
+
+.internal-text {
+    border-color: #F79A3E !important;
 }
 
 .description-div {

@@ -684,6 +684,13 @@ $(function () {
         $('.internalComment').trigger('click');
     })
 
+    $(document).on('click', '.internalComment', function (e) {
+        let ele = $('#comment_' + $(e.currentTarget).attr('id').split("_")[1]);
+        console.log(ele)
+        ele.hasClass('internal-text') ? ele.removeClass('internal-text') : ele.addClass('internal-text')
+
+    })
+
     $(document).on('mouseleave', '.description-div', function (e) {
         $("#assets_" + $(e.currentTarget).attr('id').split("_")[1]).attr("style", "height:" + $(e.currentTarget).height());
     });
